@@ -1,0 +1,74 @@
+/* Full screen center */
+.page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #320B47;
+    font-family: Arial, sans-serif;
+}
+
+/* Card */
+.card {
+    width: 350px;
+    padding: 30px;
+    background: #03C903;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #320B47;
+}
+
+/* Form layout */
+.card form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.card label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #320B47;
+    font-weight: bold;
+}
+
+/* Inputs */
+.card input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 5px;
+    outline: none;
+    transition: 0.2s;
+}
+
+/* Focus effect */
+.card input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+}
+
+/* Button */
+.card button {
+    margin-top: 20px;
+    padding: 10px;
+    background: #320B47;
+    color: #03C903;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+/* Button hover */
+.card button:hover {
+    background: #357bd8;
+}

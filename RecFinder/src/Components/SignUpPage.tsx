@@ -1,18 +1,26 @@
-
+import '../Stylesheets/SignUpPage.css';
 
 function SignUpPage(){
     return(
-        <div className="SignUp">
-            <h2>Sign Up</h2>
-            <form>
-                <h3>Username</h3>
-                <input type='text' placeholder='username'/>
-                <h3>Email</h3>
-                <input type='text' placeholder='email'/>
-                <h3>password</h3>
-                <input type='text' placeholder='insert password'/>.
-            </form>
+        <div className="page">
+            <div className="card">
+                <h2>Create Account</h2>
+
+                <form>
+                    <label>Username</label>
+                    <input type="text" placeholder="Enter username" />
+
+                    <label>Email</label>
+                    <input type="email" placeholder="Enter email" />
+
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter password" />
+
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
         </div>
     )
 }
-export default SignUpPage
+
+export default SignUpPage;

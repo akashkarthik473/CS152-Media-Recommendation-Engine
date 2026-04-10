@@ -1,3 +1,33 @@
-#body {
-    background-color: var(--accent-bg);
+.page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #320B47;
+    font-family: Arial, sans-serif;
+}
+
+.content{
+    width: 30vw;
+}
+.content h1{
+    color: #03C903;
+    text-align: center;
+}
+.content h3{
+    color: #03C903;
+    text-align: center;
+}
+.content button {
+    width: 45%;
+    margin-top: 20px;
+    margin-left: 10px;
+    padding: 10px;
+    background: #EEF4ED;
+    color: #03C903;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
 }

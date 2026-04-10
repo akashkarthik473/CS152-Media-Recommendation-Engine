@@ -1,10 +1,16 @@
 import '../Stylesheets/Homepage.css'
 
-function Homepage(){
-    return(
+function Homepage() {
+    return (
         <>
-            <div id='body'>
-                <h1>Welcome to the Homepage</h1>
+            <div className='page'>
+                <div className="content">
+                    <h1>RecFinder</h1>
+                    <h3>A one stop shop for any recommendations you might need to get started sign up or
+                        login </h3>
+                    <button>Sign Up</button>
+                    <button>Login</button>
+                </div>
             </div>
         </>
     )

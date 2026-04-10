@@ -4,7 +4,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className='navbar-left'>
-                <a href='/'>Generate</a>
+                <a href='/RecFinder/public'>Generate</a>
             </div>
             <div className='navbar-center'>
             </div>
