@@ -1,13 +1,13 @@
-FROM ubuntu:latest
-LABEL authors="Robel"
+FROM node:24-slim
 
-# Pull the Node.js Docker image:
-docker pull node:24-slim
-# Create a Node.js container and start a Shell session:
-docker run -it --rm --entrypoint sh node:24-slim
-# Verify the Node.js version:
-node -v # Should print "v24.14.1".
-# Verify npm version:
-npm -v # Should print "11.11.0".
+WORKDIR /app
 
-ENTRYPOINT ["top", "-b"]
+COPY RecFinder/package.json RecFinder/package-lock.json ./
+
+RUN npm install
+
+COPY RecFinder/ .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host"]
