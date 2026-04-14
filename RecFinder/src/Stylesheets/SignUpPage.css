@@ -28,6 +28,7 @@
 .card form {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 }
 
 /* Labels */
@@ -41,10 +42,10 @@
 
 /* Inputs */
 .card input {
+    width:90%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    margin: 5px;
     outline: none;
     transition: 0.2s;
 }
@@ -57,6 +58,7 @@
 
 /* Button */
 .card button {
+    width:100%;
     margin-top: 20px;
     padding: 10px;
     background: #320B47;

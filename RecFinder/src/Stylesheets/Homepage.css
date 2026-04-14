@@ -13,7 +13,7 @@
     color: #03C903;
     text-align: center;
 }
-.page h3{
+h3{
     color: #03C903;
     text-align: center;
 }
@@ -46,4 +46,33 @@
     cursor: pointer;
     font-weight: bold;
     transition: 0.2s;
+}
+.page select {
+    padding: 15px;
+    background: #EEF4ED;
+    color: #03C903;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+option{
+    color: black;
+}
+.recommendations {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 10px;
+
+}
+.recommendations h3{
+    text-align: center;
+}
+.recommendations p{
+    border: 3px solid #ddd;;
+    color: #03C903;
+    padding: 10px;
+    text-indent: 20px;
 }
