@@ -18,6 +18,8 @@ app.add_middleware(
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
+MODEL = "gemini-2.5-flash"
+
 
 class RecommendationRequest(BaseModel):
     query: str
@@ -43,7 +45,7 @@ async def get_recommendations(request: RecommendationRequest):
     )
 
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model=MODEL,
         contents=prompt,
     )
 
