@@ -3,11 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
 from dotenv import load_dotenv
+from auth import router as auth_router
+from database.db import engine, Base
 import os
+
+Base.metadata.create_all(engine)
 
 load_dotenv()
 
 app = FastAPI()
+
+app.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
