@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
 from dotenv import load_dotenv
-from auth import router as auth_router
+from auth import router as auth_router, get_current_user
+from database.models import User
 from database.db import engine, Base
 import os
 
@@ -42,7 +43,10 @@ def health_check():
 
 
 @app.post("/recommend", response_model=RecommendationResponse)
-async def get_recommendations(request: RecommendationRequest):
+async def get_recommendations(
+    request: RecommendationRequest,
+    _user: User = Depends(get_current_user),
+):
     prompt = (
         f"You are a media recommendation engine. "
         f"The user is looking for {request.media_type} recommendations. "

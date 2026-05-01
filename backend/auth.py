@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, status, APIRouter
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from datetime import datetime, timedelta
@@ -19,20 +19,23 @@ class UserCreate(BaseModel):
     email: str
     password: str
 
+class UserPublic(BaseModel):
+    id: int
+    username: str
+    email: str
+
+    class Config:
+        from_attributes = True
+
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-class TokenData(BaseModel):
-    username: str = None
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto",
 )
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="token",
-)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -94,24 +97,27 @@ async def get_current_user(
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-
-        token_data = User(username=username)
     except JWTError:
         raise credentials_exception
 
-    user = get_user(db, username=token_data.username)
+    user = get_user(db, username=username)
     if user is None:
         raise credentials_exception
 
     return user
 
-@router.post("/signup")
+@router.post("/signup", response_model=UserPublic)
 def signup(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = get_user(db, user.username)
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
 
     return create_user(db, user)
+
+
+@router.get("/me", response_model=UserPublic)
+def read_me(current_user: User = Depends(get_current_user)):
+    return current_user
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(

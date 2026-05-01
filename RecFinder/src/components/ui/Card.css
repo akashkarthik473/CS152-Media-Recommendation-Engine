@@ -1,0 +1,19 @@
+.ui-card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.ui-card--md {
+  padding: var(--space-5);
+}
+.ui-card--lg {
+  padding: var(--space-6);
+}
+
+@media (max-width: 600px) {
+  .ui-card--lg {
+    padding: var(--space-5);
+  }
+}

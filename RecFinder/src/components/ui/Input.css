@@ -1,0 +1,31 @@
+.ui-input,
+.ui-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--color-bg-input);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.ui-input::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.ui-input:focus,
+.ui-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.ui-input--invalid {
+  border-color: var(--color-danger);
+}
+.ui-input--invalid:focus {
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18);
+}
