@@ -30,6 +30,15 @@ export function Navbar() {
           >
             Discover
           </NavLink>
+          <NavLink  
+            to="/list"
+            end
+            className={({ isActive }) =>
+              isActive ? "navbar__link navbar__link--active" : "navbar__link"
+            }
+          >
+           List
+          </NavLink>
         </nav>
 
         <div className="navbar__actions">

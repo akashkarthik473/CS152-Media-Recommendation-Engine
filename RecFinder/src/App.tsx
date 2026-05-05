@@ -7,6 +7,7 @@ import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignupPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import {MediaListPage} from "./pages/MediaListPage";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,10 @@ const router = createBrowserRouter([
     children: [
       {
         Component: ProtectedRoute,
-        children: [{ index: true, Component: HomePage }],
+        children: [
+            { index: true, Component: HomePage },
+            {index: true, path: "list", Component: MediaListPage}
+        ],
       },
       {
         Component: PublicOnlyRoute,
