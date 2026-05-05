@@ -9,12 +9,19 @@ import { ApiError } from "../api/client";
 import { useAuth } from "../hooks/useAuth";
 import "./AuthPage.css";
 
+// shape of the location state we read after ProtectedRoute redirects an anonymous user
+// here, so we can bounce them back to the page they originally wanted
 type LocationState = { from?: string };
 
+
+// Login page component, collects username and password, calls the auth context login,
+// and redirects either to the page the user was trying to reach or to the home page
+// Output: JSX login form
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  // path the user was trying to reach before being bounced to login, defaults to home
   const redirectTo = (location.state as LocationState | null)?.from ?? "/";
 
   const [username, setUsername] = useState("");
@@ -22,16 +29,26 @@ export function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /*
+  * Purpose: submits the login form, exchanges credentials for a JWT, and navigates the
+  *          user to their original destination on success
+  * Input: HTML Form Event Element
+  * Output: None
+  */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
+      //asks the auth context to log in, which stores the token and loads the user profile
       await login({ username, password });
+      //replace history so the back button doesn't bring them back to the login screen
       navigate(redirectTo, { replace: true });
     } catch (err) {
+      //surface backend message if available, otherwise show a generic failure
       setError(err instanceof ApiError ? err.message : "Login failed. Try again.");
     } finally {
+      //always stop the loading state so the user can retry
       setLoading(false);
     }
   };

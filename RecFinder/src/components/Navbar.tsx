@@ -3,10 +3,14 @@ import { useAuth } from "../hooks/useAuth";
 import { Button } from "./ui/Button";
 import "./Navbar.css";
 
+// Navbar shown at the top of every page, switches between auth'd and anonymous controls
+// based on the current auth status pulled from AuthContext
+// Output: JSX header containing the brand, page links, and user/auth actions
 export function Navbar() {
   const { status, user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // logs the user out and bounces them back to the login page
   const handleLogout = () => {
     logout();
     navigate("/login");

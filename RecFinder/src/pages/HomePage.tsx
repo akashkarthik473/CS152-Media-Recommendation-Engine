@@ -12,6 +12,8 @@ import type { MediaType } from "../types";
 import "./HomePage.css";
 import { mediaListStorage } from "../lib/storage";
 
+// Options shown in the media type Select dropdown, the value is the string sent to the
+// backend and the label is what the user actually sees in the UI
 const MEDIA_OPTIONS: { value: MediaType; label: string }[] = [
   { value: "any", label: "Any" },
   { value: "movies", label: "Movies" },
@@ -20,28 +22,42 @@ const MEDIA_OPTIONS: { value: MediaType; label: string }[] = [
   { value: "games", label: "Games" },
 ];
 
+
+// Home page component, shows a tabbed UI letting the user either type a free-form query
+// or generate recommendations based on their saved media list
+// Output: JSX home page with tabs, forms, and results card
 export function HomePage() {
   const { user } = useAuth();
-  const [query, setQuery] = useState("");
-  const [mediaType, setMediaType] = useState<MediaType>("any");
-  const [listType, setListType] = useState<MediaType>("any");
-  const [recs, setRecs] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState(""); //holds the free-form recommendation query
+  const [mediaType, setMediaType] = useState<MediaType>("any"); //media type used for the recommendation request
+  const [listType, setListType] = useState<MediaType>("any"); //filter for which media types from the list feed into the prompt
+  const [recs, setRecs] = useState(""); //gemini's recommendation text shown to the user
+  const [error, setError] = useState<string | null>(null); //error message surfaced via the Alert if a request fails
+  const [loading, setLoading] = useState(false); //true while a recommendation request is in flight
   const [activeTab, setActiveTab] = useState<"search" | "list">("search"); //controls the tabs the users is on
 
+  /*
+  * Purpose: handles the free-form Search tab submission, calls the recommendation api
+  *          with the typed query and selected media type
+  * Input: HTML Form Event Element
+  * Output: None
+  */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //ignore empty queries so we don't waste a gemini call on whitespace
     if (!query.trim()) return;
     setLoading(true);
     setError(null);
     setRecs("");
     try {
+      //fires the recommendation request and stores the returned text for display
       const res = await recommendationsApi.generate({ query, mediaType });
       setRecs(res.recommendations);
     } catch (err) {
+      //if the backend gave us a structured error use its message, otherwise fall back to a generic one
       setError(err instanceof ApiError ? err.message : "Something went wrong. Try again.");
     } finally {
+      //regardless of success or failure, stop the loading state so the button is clickable again
       setLoading(false);
     }
   };

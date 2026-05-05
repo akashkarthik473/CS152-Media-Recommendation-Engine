@@ -9,6 +9,9 @@ import { ApiError } from "../api/client";
 import { useAuth } from "../hooks/useAuth";
 import "./AuthPage.css";
 
+// Sign up page component, collects username/email/password, creates the account through
+// the auth context, and on success drops the user straight on the home page already logged in
+// Output: JSX sign up form
 export function SignupPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -19,16 +22,26 @@ export function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /*
+  * Purpose: submits the sign up form, the auth context handles creating the user and
+  *          immediately logging them in so we just navigate home on success
+  * Input: HTML Form Event Element
+  * Output: None
+  */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
+      //creates the account and logs the user in in one step
       await signup({ username, email, password });
+      //replace history so the back button doesn't bring them back to the signup screen
       navigate("/", { replace: true });
     } catch (err) {
+      //surface backend message if available, otherwise show a generic failure
       setError(err instanceof ApiError ? err.message : "Sign up failed. Try again.");
     } finally {
+      //always stop the loading state so the user can retry
       setLoading(false);
     }
   };

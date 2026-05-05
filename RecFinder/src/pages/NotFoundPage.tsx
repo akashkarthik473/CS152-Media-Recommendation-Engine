@@ -2,6 +2,9 @@ import { Link } from "react-router";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 
+// 404 page rendered by the catch-all route when the user navigates to a path that
+// doesn't exist, gives them a single button back to the home page
+// Output: JSX 404 card
 export function NotFoundPage() {
   return (
     <div className="auth">
