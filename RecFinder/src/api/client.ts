@@ -68,4 +68,6 @@ export const api = {
     request<T>(path, { ...opts, method: "GET" }),
   post: <T>(path: string, body?: Body, opts?: Omit<RequestOptions, "method" | "body">) =>
     request<T>(path, { ...opts, method: "POST", body }),
+  delete: <T>(path: string, body?: Body, opts?: Omit<RequestOptions, "method" | "body">) =>
+    request<T>(path, {...opts, method: "DELETE", body}),
 };

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from google import genai
 from dotenv import load_dotenv
 from auth import router as auth_router, get_current_user
+from media import router as media_router
 from database.models import User
 from database.db import engine, Base
 import os
@@ -15,6 +16,7 @@ load_dotenv()
 app = FastAPI()
 
 app.include_router(auth_router)
+app.include_router(media_router)
 
 app.add_middleware(
     CORSMiddleware,

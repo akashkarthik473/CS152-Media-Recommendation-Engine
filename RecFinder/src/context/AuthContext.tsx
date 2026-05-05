@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { authApi } from "../api/auth";
-import { tokenStorage } from "../lib/storage";
+import { api } from "../api/client";
+import { mediaListStorage, tokenStorage } from "../lib/storage";
 import type { User } from "../types";
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
@@ -45,6 +46,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const me = await authApi.me();
     setUser(me);
     setStatus("authenticated");
+
+    //After Logging in application calls the media_list api to retreive past media they have stored
+    try {
+      const mediaList = await api.post<any[]>("/media_list", { user_id: me.id }, { auth: true });
+      mediaListStorage.set(mediaList);
+      console.log("Loaded user media list", mediaList);
+    } catch (error) {
+      mediaListStorage.clear();
+      console.error("Failed to load user media list after login", error);
+    }
   }, []);
 
   const signup = useCallback(
@@ -57,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     tokenStorage.clear();
+    mediaListStorage.clear();
     setUser(null);
     setStatus("anonymous");
   }, []);
