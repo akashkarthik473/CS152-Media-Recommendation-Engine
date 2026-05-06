@@ -1,4 +1,4 @@
-/* Override global body background to remove gradients */
+/* Overrides global body background to remove gradients */
 body {
   background: var(--color-bg) !important;
 }
@@ -16,6 +16,7 @@ body {
   margin: 0;
 }
 
+/*sets up grid layout for each media section (movies, games etc) */
 .media {
   display: flex;
   flex-wrap: wrap;
@@ -23,6 +24,7 @@ body {
   min-height: 100px;
 }
 
+/* + box used to open the search popup */
 .add-media-box {
   width: 150px;
   height: 200px;
@@ -83,7 +85,7 @@ body {
   line-height: 1.3;
   min-height: 38px;
 }
-
+/*sets up background for pop up and centers popup content */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -97,8 +99,9 @@ body {
   z-index: 1000;
 }
 
+
 .modal-content {
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: var(--space-5);
@@ -143,6 +146,7 @@ body {
   margin-bottom: var(--space-4);
 }
 
+/* describes each indivual search result row */
 .modal-result-item {
   display: flex;
   align-items: center;

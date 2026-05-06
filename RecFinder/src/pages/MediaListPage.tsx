@@ -95,6 +95,7 @@ export function MediaListPage(){
         //checks if duplicates alread exist if they do then return
         if(alreadyExists) {
             setModalError("can't add duplicate items")
+            return
         }
 
         //saves item to databsae and adds it to selected items, if db save fails doesnt add it to selcted items
@@ -225,18 +226,21 @@ export function MediaListPage(){
         <div className="media-div">
             <h2>Movies</h2>
             <div className="media">
+                {/* when div is pressed opens the popup and sets dropdown to movie */}
                 <div className="add-media-box" onClick={() => openModal("movie")}>
                     <span className="add-media-icon">+</span>
-                </div>                
+                </div> 
+
+                {/* Renders the users curated movie list and lets them remove movies with a click*/}          
                 {selectedItems.filter((item) => item.mediaType === "movie") 
                 .map((item) =>(
                   <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
                     {item.posterPath ? (
-                      <img src={`https://image.tmdb.org/t/p/w185${item.posterPath}`} alt={item.title} />
-                    ) : (
-                      <div className="media-card__placeholder">No image</div>
-                    )}
-                    <div className="media-card__title">{item.title}</div>
+                        <img src={`https://image.tmdb.org/t/p/w185${item.posterPath}`} alt={item.title} />
+                        ) : (
+                            <div className="media-card__placeholder">No image</div>
+                        )}
+                        <div className="media-card__title">{item.title}</div>
                   </div>
                 ))}            
             </div>
@@ -245,16 +249,17 @@ export function MediaListPage(){
             <div className="media">
                 <div className="add-media-box" onClick={() => openModal("tv")}>
                     <span className="add-media-icon">+</span>
-                </div>                
+                </div> 
+                {/* Renders the users curated tv_show list*/}                
                 {selectedItems.filter((item) => item.mediaType === "tv") 
                 .map((item) =>(
-                  <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
-                    {item.posterPath ? (
-                      <img src={`https://image.tmdb.org/t/p/w185${item.posterPath}`} alt={item.title} />
-                    ) : (
-                      <div className="media-card__placeholder">No image</div>
-                    )}
-                    <div className="media-card__title">{item.title}</div>
+                    <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
+                        {item.posterPath ? (
+                            <img src={`https://image.tmdb.org/t/p/w185${item.posterPath}`} alt={item.title} />
+                        ) : (
+                            <div className="media-card__placeholder">No image</div>
+                        )}
+                        <div className="media-card__title">{item.title}</div>
                   </div>
                 ))}            
             </div>
@@ -263,17 +268,18 @@ export function MediaListPage(){
             <div className="media">
                 <div className="add-media-box" onClick={() => openModal("book")}>
                     <span className="add-media-icon">+</span>
-                </div>                
+                </div>
+                {/* Renders the users curated books list*/}                
                 {selectedItems.filter((item) => item.mediaType === "book") 
                 .map((item) =>(
-                  <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
-                    {item.posterPath ? (
-                      <img src={item.posterPath} alt={item.title} />
-                    ) : (
-                      <div className="media-card__placeholder">No image</div>
-                    )}
-                    <div className="media-card__title">{item.title}</div>
-                  </div>
+                    <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
+                        {item.posterPath ? (
+                            <img src={item.posterPath} alt={item.title} />
+                        ) : (
+                            <div className="media-card__placeholder">No image</div>
+                        )}
+                        <div className="media-card__title">{item.title}</div>
+                    </div>
                 ))}            
             </div>
 
@@ -282,10 +288,10 @@ export function MediaListPage(){
                 <div className="add-media-box" onClick={() => openModal("game")}>
                     <span className="add-media-icon">+</span>
                 </div>                
-                    {selectedItems.filter((item) => item.mediaType === "game") 
-                    .map((item) =>(
-                        <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
-                    {   item.posterPath ? (
+                {selectedItems.filter((item) => item.mediaType === "game") 
+                .map((item) =>(
+                    <div key={item.id} className="media-card" onClick={() => deleteSelectedItem(item.id)}>
+                        {item.posterPath ? (
                         <img src={item.posterPath} alt={item.title} />
                         ) : (
                             <div className="media-card__placeholder">No image</div>
@@ -295,9 +301,11 @@ export function MediaListPage(){
                     ))}            
                 </div>
             </div>
-
+        {/*if show modal is true then it renders the popup*/}
         {showModal && (
             <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                {/* if you click anywhere outside the popup the popup gets closed */}
+                {/* makes it so that clicking inside the popup doens't close it */}
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <h2>Add Media</h2>
                     
@@ -315,6 +323,7 @@ export function MediaListPage(){
                         />
                     </div>
 
+                    {/* error message that popus up when you try to add a duplicate item*/}
                     {modalError && (
                         <div className="modal-feedback">
                             <Alert variant="error">{modalError}</Alert>
@@ -324,15 +333,19 @@ export function MediaListPage(){
                     {modalLoading && <div className="modal-loading">Searching...</div>}
 
                     <div className="modal-results">
+                        {/* limits search results to 10 items and renders each item according to the following html */}
                         {modalResults.slice(0, 10).map((item: any) => (
                             <div key={item.id} className="modal-result-item">
+                                {/* chceks all possible title and subtitle variable names each item can have and dispalys them*/}
                                 <div className="result-info">
                                     <h4>{item.title || item.name || item.volumeInfo?.title || item.original_title || item.original_name}</h4>
                                     <p>{item.release_date || item.first_air_date || item.released || item.volumeInfo?.publishedDate ? 
                                         new Date(item.release_date || item.first_air_date || item.released || item.volumeInfo?.publishedDate).getFullYear() : 
                                         'N/A'}</p>
                                 </div>
-                                <Button size="sm" onClick={() => addSelectedItem(item)}>Add</Button>
+                                <Button size="sm" onClick={() => addSelectedItem(item)}>
+                                    Add
+                                </Button>
                             </div>
                         ))}
                         {modalQuery && !modalLoading && modalResults.length === 0 && (
