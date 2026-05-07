@@ -207,7 +207,7 @@ export function HomePage() {
             {recs.recommendations.map((item: RecommendationItem) => (
               <div key={item.title} className="recommendation-result">
                   <h3>{item.title}</h3>
-                  <p>&ensp{item.description}</p>
+                  <p>&ensp;{item.description}</p>
                   <br></br>
               </div>
             ))}
