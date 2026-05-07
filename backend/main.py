@@ -90,7 +90,7 @@ async def get_recommendations(
 
         DO NOT wrap output in ``` or markdown. Output raw JSON only.
         make sure the descriptiosn explains why the recommendation is being given
-        
+
         User request:
         {request.query}
     """
@@ -101,7 +101,9 @@ async def get_recommendations(
         contents=prompt,
     )
 
-    print(response.text)
+    # removes predicted backticks or mockup the response may add
+    cleaned = response.text.replace("```json", "").replace("```", "").strip()
+
     # parse json response sent by gemini and returns it as a response
-    data = json.loads(response.text)
+    data = json.loads(cleaned)
     return RecommendationResponse(**data)

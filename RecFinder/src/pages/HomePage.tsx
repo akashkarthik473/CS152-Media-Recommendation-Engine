@@ -122,7 +122,7 @@ export function HomePage() {
           {user ? `Welcome back, ${user.username}` : "Find your next favorite"}
         </h1>
         <p className="home__subtitle">
-          Tell us what you love and we&apos;ll surface five tailored recommendations.
+          Tell us what you love and we&apos;ll surface five tailored recommendations. Or use one of your curated lists
         </p>
           <div className="home__tabs">
             <button
@@ -207,7 +207,7 @@ export function HomePage() {
             {recs.recommendations.map((item: RecommendationItem) => (
               <div key={item.title} className="recommendation-result">
                   <h3>{item.title}</h3>
-                  <p>&ensp;{item.description}</p>
+                  <p>&emsp;{item.description}</p>
                   <br></br>
               </div>
             ))}
