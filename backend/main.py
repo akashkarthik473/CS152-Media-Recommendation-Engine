@@ -7,7 +7,8 @@ from auth import router as auth_router, get_current_user
 from media import router as media_router
 from database.models import User
 from database.db import engine, Base
-import os
+from typing import List
+import os, json
 
 # creates all tables defined on the SQLAlchemy Base in the database if they don't exist
 Base.metadata.create_all(engine)
@@ -44,9 +45,15 @@ class RecommendationRequest(BaseModel):
     media_type: str = "any"  # "movie", "tv", "music", "book", "any"
 
 
-# Model for the response returned by the recommendation endpoint
+# Model for a single recommendation item in the recommendation response list
+class RecommendationItem(BaseModel):
+    title: str
+    description: str
+
+
+# Model for the response of the /recommdations route
 class RecommendationResponse(BaseModel):
-    recommendations: str
+    recommendations: List[RecommendationItem]
 
 
 # Get request method that confirms the server is running, used as a basic health probe
@@ -66,17 +73,35 @@ async def get_recommendations(
     _user: User = Depends(get_current_user),
 ):
     # builds the prompt sent to gemini using the user's media type and free-form query
-    prompt = (
-        f"You are a media recommendation engine. "
-        f"The user is looking for {request.media_type} recommendations. "
-        f"Based on the following request, provide 5 recommendations with a short "
-        f"description for each:\n\n{request.query}"
-    )
+    prompt = f"""
+        You are a media recommendation engine. 
+        The user is looking for {request.media_type} recommendations.
+        Based on the following request, provide 5 recommendations
+        Return ONLY valid JSON in this format:
+        
+        {{
+            "recommendations: [
+                {{
+                    "title": "string"
+                    "description": "string"
+                }}
+            ]
+        }}
 
-    # sends the prompt to gemini and gets back the generated recommendations text
+        DO NOT wrap output in ``` or markdown. Output raw JSON only.
+        make sure the descriptiosn explains why the recommendation is being given
+        
+        User request:
+        {request.query}
+    """
+    # sends the prompt to gemini and gets back the generated recommendations text in JSON
+    # format
     response = client.models.generate_content(
         model=MODEL,
         contents=prompt,
     )
 
-    return RecommendationResponse(recommendations=response.text)
+    print(response.text)
+    # parse json response sent by gemini and returns it as a response
+    data = json.loads(response.text)
+    return RecommendationResponse(**data)

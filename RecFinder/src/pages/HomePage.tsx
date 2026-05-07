@@ -9,6 +9,7 @@ import { ApiError } from "../api/client";
 import { useAuth } from "../hooks/useAuth";
 import type { Media } from "../types"
 import type { MediaType } from "../types";
+import type { RecommendationItem } from "../types";
 import "./HomePage.css";
 import { mediaListStorage } from "../lib/storage";
 
@@ -31,7 +32,7 @@ export function HomePage() {
   const [query, setQuery] = useState(""); //holds the free-form recommendation query
   const [mediaType, setMediaType] = useState<MediaType>("any"); //media type used for the recommendation request
   const [listType, setListType] = useState<MediaType>("any"); //filter for which media types from the list feed into the prompt
-  const [recs, setRecs] = useState(""); //gemini's recommendation text shown to the user
+  const [recs, setRecs] = useState<any>(null); //gemini's recommendation JSON response shown to the user
   const [error, setError] = useState<string | null>(null); //error message surfaced via the Alert if a request fails
   const [loading, setLoading] = useState(false); //true while a recommendation request is in flight
   const [activeTab, setActiveTab] = useState<"search" | "list">("search"); //controls the tabs the users is on
@@ -48,11 +49,11 @@ export function HomePage() {
     if (!query.trim()) return;
     setLoading(true);
     setError(null);
-    setRecs("");
+    setRecs(null);
     try {
       //fires the recommendation request and stores the returned text for display
       const res = await recommendationsApi.generate({ query, mediaType });
-      setRecs(res.recommendations);
+      setRecs(res);
     } catch (err) {
       //if the backend gave us a structured error use its message, otherwise fall back to a generic one
       setError(err instanceof ApiError ? err.message : "Something went wrong. Try again.");
@@ -71,7 +72,7 @@ export function HomePage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+    setRecs(null)
     //grabs list of all the media the user has curated 
     const stored = mediaListStorage.get()
 
@@ -106,7 +107,7 @@ export function HomePage() {
     //calls the recommendation api to recieve the gemini recommendations using the concatenated list of titles as the query, and the current list type as the mediaType
     try {
       const res = await recommendationsApi.generate({ query: titles, mediaType });
-      setRecs(res.recommendations);
+      setRecs(res);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Something went wrong. Try again.");
     } finally { //onec api call is over no matter it worked or not stop loading state
@@ -200,7 +201,17 @@ export function HomePage() {
       {recs ? (
         <Card className="home__results" padding="lg">
           <h2 className="home__results-title">Recommendations</h2>
-          <pre className="home__results-body">{recs}</pre>
+          
+          {/* Renders recommendations returned by the engine*/}
+          <div className="home_recommendations-list">
+            {recs.recommendations.map((item: RecommendationItem) => (
+              <div key={item.title} className="recommendation-result">
+                  <h3>{item.title}</h3>
+                  <p>&ensp{item.description}</p>
+                  <br></br>
+              </div>
+            ))}
+          </div>
         </Card>
       ) : null}
     </div>

@@ -26,3 +26,10 @@ export type Media = {
   subtitle: string;
   posterPath: string | null;
 }
+
+// Shape of a recommendation item in the gemini api JSON response
+export type RecommendationItem = {
+  title: string;
+  description: string;
+}
+
